@@ -1,0 +1,1255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Offboarding Form</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: #f0f2f5;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            width: 95%;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            text-align: center;
+            font-size:40px ;
+        }
+
+        h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            text-align: center;
+            font-size:35px ;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background: #eee;
+            border-radius: 5px;
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+
+        .progress {
+            width: 0%;
+            height: 100%;
+            background: #3498db;
+            transition: width 0.3s ease;
+        }
+
+        .form-section {
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+
+        .form-section.active {
+            display: block;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="date"],
+        input[type="tel"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            resize: none;
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .prev-btn {
+            background: #27c81e;
+            color: white;
+        }
+
+        .next-btn {
+            background: #3498db;
+            color: white;
+        }
+
+        .submit-btn {
+            background: #2ecc71;
+            color: white;
+        }
+
+        .error-message {
+            color: red;
+            font-size: 0.8em;
+            margin-top: -10px;
+            margin-bottom: 15px;
+            display: none;
+        }
+
+        input.invalid, select.invalid, textarea.invalid {
+            border-color: red;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .asset-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            width: 100%;
+        }
+
+        .asset-item input[type="checkbox"] {
+            margin-right: 10px;
+            flex: 0 0 auto;
+        }
+
+        .asset-item label {
+            margin-bottom: 0;
+            flex: 0 0 150px;
+            display: inline-block;
+        }
+
+        .asset-item input[type="text"] {
+            margin-bottom: 0;
+            margin-left: 10px;
+            flex: 1;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .success-message {
+            text-align: center;
+            color: #2ecc71;
+            font-size: 1.2em;
+            padding: 20px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>EMPLOYEE OFFBOARDING FORM</h1>
+        <div class="progress-bar">
+            <div class="progress"></div>
+        </div>
+
+        <form id="offboardingForm">
+            <!-- Personal Information Section -->
+            <div class="form-section active" data-section="1">
+                <h2>Personal Information</h2>
+                <div class="form-grid">
+                    <div>
+                        <label for="fullName">Full Name *</label>
+                        <input type="text" id="fullName" name="fullName" required minlength="5" pattern="^[A-Za-z\s]+$">
+                        <div class="error-message" id="fullNameError">Full Name must be at least 5 characters and contain only alphabets</div>
+                    </div>
+                    <div>
+                        <label for="employeeId">Employee ID *</label>
+                        <input type="text" id="employeeId" name="employeeId" required pattern="^ATS0(\d{2}[1-9]|\d[1-9]\d|[1-9]\d{2})$">
+                        <div class="error-message" id="employeeIdError">Employee ID must start with ATS0, followed by at least one non-zero digit</div>
+                    </div>
+                    <div>
+                        <label for="email">Company Email *</label>
+                        <input type="email" id="email" name="email" required pattern="[a-zA-Z0-9._%+-]+@astrolitetech\.com$">
+                        <div class="error-message" id="emailError">Only @astrolitetech.com emails are allowed</div>
+                    </div>
+                    <div>
+                        <label for="department">Department *</label>
+                        <select id="department" name="department" required>
+                            <option value="">Select Department</option>
+                            <option value="frontend">Frontend Development</option>
+                            <option value="backend">Backend Development</option>
+                            <option value="fullstack">Full Stack Development</option>
+                            <option value="devops">DevOps</option>
+                            <option value="qa">Quality Assurance</option>
+                            <option value="hr">Human Resources</option>
+                            <option value="sales">Sales</option>
+                            <option value="marketing">Marketing</option>
+                        </select>
+                        <div class="error-message" id="departmentError">Please select a department</div>
+                    </div>
+                    <div>
+                        <label for="position">Position *</label>
+                        <input type="text" id="position" name="position" required minlength="3" maxlength="15" pattern="^[A-Za-z\s]+$">
+                        <div class="error-message" id="positionError">Position must be at least 3 characters and contain only alphabets</div>
+                    </div>
+                    <div>
+                        <label for="lastWorkDay">Last Working Day *</label>
+                        <input type="date" id="lastWorkDay" name="lastWorkDay" required>
+                        <div class="error-message" id="lastWorkDayError">Please select a valid future date with a 4-digit year</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contact Information Section -->
+            <div class="form-section" data-section="2">
+                <h2>Contact Information</h2>
+                <div class="form-grid">
+                    <div>
+                        <label for="personalEmail">Personal Email *</label>
+                        <input type="email" id="personalEmail" name="personalEmail" required pattern="[a-zA-Z0-9._%+-]+@(gmail\.com|yahoo\.com|outlook\.com)$">
+                        <div class="error-message" id="personalEmailError">Only @gmail.com, @yahoo.com, or @outlook.com emails are allowed</div>
+                    </div>
+                    <div>
+                        <label for="phoneNumber">Phone Number *</label>
+                        <input type="tel" id="phoneNumber" name="phoneNumber" required pattern="^\d{10}$">
+                        <div class="error-message" id="phoneNumberError">Phone number must be exactly 10 digits</div>
+                    </div>
+                    <div>
+                        <label for="alternateContactName">Emergency Contact Name (optional)</label>
+                        <input type="text" id="alternateContactName" name="alternateContactName" minlength="3" pattern="^[A-Za-z\s]*$">
+                        <div class="error-message" id="alternateContactNameError">Contact name can only contain alphabets</div>
+                    </div>
+                    <div>
+                        <label for="alternateContactNumber">Emergency Contact Number (optional)</label>
+                        <input type="tel" id="alternateContactNumber" name="alternateContactNumber">
+                    </div>
+                    <div>
+                        <label for="currentAddress">Current Address *</label>
+                        <textarea id="currentAddress" name="currentAddress" required minlength="10"></textarea>
+                        <div class="error-message" id="currentAddressError">Please provide your current address</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Project Handover Section -->
+            <div class="form-section" data-section="3">
+                <h2>Project Handover</h2>
+                <div>
+                    <label for="currentProjects">Current Projects *</label>
+                    <textarea id="currentProjects" name="currentProjects" required minlength="10" placeholder="List all ongoing projects and their current status"></textarea>
+                    <div class="error-message" id="currentProjectsError">Please describe your current projects</div>
+                </div>
+                <div>
+                    <label for="projectStatus">Project Status *</label>
+                    <textarea id="projectStatus" name="projectStatus" required minlength="10" placeholder="Provide detailed status of each project, including any pending tasks"></textarea>
+                    <div class="error-message" id="projectStatusError">Please provide project status details</div>
+                </div>
+                <div>
+                    <label for="handoverPerson">Handover Person *</label>
+                    <input type="text" id="handoverPerson" name="handoverPerson" required minlength="3" placeholder="Name of the person who will take over your responsibilities" pattern="^[A-Za-z\s]+$">
+                    <div class="error-message" id="handoverPersonError">Please specify the handover person (alphabets only)</div>
+                </div>
+            </div>
+
+            <!-- Exit Interview Section -->
+            <div class="form-section" data-section="4">
+                <h2>Exit Interview</h2>
+                <div>
+                    <label for="resignationReason">Reason for Leaving *</label>
+                    <select id="resignationReason" name="resignationReason" required>
+                        <option value="">Select Reason</option>
+                        <option value="career">Career Growth</option>
+                        <option value="compensation">Compensation</option>
+                        <option value="work-environment">Work Environment</option>
+                        <option value="personal">Personal Reasons</option>
+                        <option value="relocation">Relocation</option>
+                        <option value="other">Other</option>
+                    </select>
+                    <div class="error-message" id="resignationReasonError">Please select a reason for leaving</div>
+                </div>
+                <div>
+                    <label for="otherReasonDetails">If Other, Please Specify</label>
+                    <textarea id="otherReasonDetails" name="otherReasonDetails" placeholder="Provide details if 'Other' was selected"></textarea>
+                </div>
+                <div>
+                    <label for="feedback">Constructive Feedback *</label>
+                    <textarea id="feedback" name="feedback" required minlength="10" placeholder="Please provide honest feedback about your experience"></textarea>
+                    <div class="error-message" id="feedbackError">Please provide your feedback</div>
+                </div>
+                <div>
+                    <label for="wouldRecommend">Would You Recommend the Company?</label>
+                    <select id="wouldRecommend" name="wouldRecommend">
+                        <option value="yes">Yes</option>
+                        <option value="no">No</option>
+                        <option value="maybe">Maybe</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Asset Return Section -->
+            <div class="form-section" data-section="5">
+                <h2>Asset Return</h2>
+                <div id="assetList">
+                    <div class="asset-item">
+                        <input type="checkbox" name="assets" value="laptop" id="laptopCheckbox">
+                        <label for="laptopCheckbox">Company Laptop</label>
+                        <input type="text" name="laptopSerial" placeholder="Serial Number" />
+                    </div>
+                    <div class="asset-item">
+                        <input type="checkbox" name="assets" value="phone" id="phoneCheckbox">
+                        <label for="phoneCheckbox">Company Phone</label>
+                        <input type="text" name="phoneSerial" placeholder="Serial Number" />
+                    </div>
+                    <div class="asset-item">
+                        <input type="checkbox" name="assets" value="monitor" id="monitorCheckbox">
+                        <label for="monitorCheckbox">External Monitor</label>
+                        <input type="text" name="monitorSerial" placeholder="Serial Number" />
+                    </div>
+                    <div class="asset-item">
+                        <input type="checkbox" name="assets" value="accessCard" id="accessCardCheckbox">
+                        <label for="accessCardCheckbox">Access Card</label>
+                        <input type="text" name="accessCardNumber" placeholder="Card Number" />
+                    </div>
+                    <div>
+                        <label for="additionalAssets">Additional Assets</label>
+                        <textarea id="additionalAssets" name="additionalAssets" placeholder="List any other company assets not mentioned above"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div class="buttons">
+                <button type="button" id="prevBtn" class="prev-btn" style="display:none;">Previous</button>
+                <button type="button" id="nextBtn" class="next-btn">Next</button>
+                <button type="submit" id="submitBtn" class="submit-btn" style="display:none;">Submit</button>
+            </div>
+        </form>
+
+        <div class="success-message">
+            Your offboarding request has been submitted successfully.
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('offboardingForm');
+            const sections = document.querySelectorAll('.form-section');
+            const nextBtn = document.getElementById('nextBtn');
+            const prevBtn = document.getElementById('prevBtn');
+            const submitBtn = document.getElementById('submitBtn');
+            const progressBar = document.querySelector('.progress');
+            const successMessage = document.querySelector('.success-message');
+            let currentSection = 0;
+
+            // Add input event listeners to all form fields
+            document.querySelectorAll('input, select, textarea').forEach(input => {
+                input.addEventListener('input', function() {
+                    validateField(this);
+                });
+
+                // Add blur event listener for immediate validation when leaving field
+                input.addEventListener('blur', function() {
+                    validateField(this);
+                });
+            });
+
+            function getTextWithoutSpaces(text) {
+                return text.replace(/\s/g, '');
+            }
+
+            function validateMinLength(value, minLength) {
+                const textWithoutSpaces = getTextWithoutSpaces(value);
+                return textWithoutSpaces.length >= minLength;
+            }
+
+            function validateField(input) {
+                const errorElement = document.getElementById(`${input.id}Error`);
+                if (!errorElement) return true;
+
+                let isValid = true;
+                const value = input.value;
+
+                // Check for required fields
+                if (input.hasAttribute('required') && !value.trim()) {
+                    isValid = false;
+                }
+
+                // Check minimum length (excluding spaces)
+                if (input.hasAttribute('minlength')) {
+                    const minLength = parseInt(input.getAttribute('minlength'));
+                    if (!validateMinLength(value, minLength)) {
+                        isValid = false;
+                    }
+                }
+
+                // Check pattern if exists
+                if (input.hasAttribute('pattern')) {
+                    const pattern = new RegExp(input.getAttribute('pattern'));
+                    if (!pattern.test(value)) {
+                        isValid = false;
+                    }
+                }
+
+                // Special validation for name fields to allow only alphabets (with spaces)
+                if (input.id === 'fullName' || input.id === 'position' || input.id === 'handoverPerson' || input.id === 'alternateContactName') {
+                    const alphabetPattern = /^[A-Za-z\s]*$/;
+                    if (value && !alphabetPattern.test(value)) {
+                        isValid = false;
+                        if (errorElement) {
+                            errorElement.textContent = `${input.id === 'fullName' ? 'Full Name' : 
+                                                        input.id === 'position' ? 'Position' : 
+                                                        input.id === 'handoverPerson' ? 'Handover Person' : 
+                                                        'Contact Name'} must contain only alphabets`;
+                        }
+                    }
+                }
+
+                // Special validation for last work day
+                if (input.id === 'lastWorkDay') {
+                    const selectedDate = new Date(value);
+                    const today = new Date();
+                    today.setHours(0, 0, 0, 0); // Reset time to beginning of day
+                    
+                    // Validate year - must be 4 digits
+                    const yearPattern = /^\d{4}-\d{2}-\d{2}$/;
+                    if (!yearPattern.test(value)) {
+                        isValid = false;
+                        document.getElementById('lastWorkDayError').textContent = 'Last working day must have a 4-digit year';
+                    } else if (selectedDate <= today) {
+                        isValid = false;
+                        document.getElementById('lastWorkDayError').textContent = 'Last working day must be a future date';
+                    }
+                }
+
+                // Special validation for email fields
+                if (input.type === 'email') {
+                    const emailPattern = input.hasAttribute('pattern') ? 
+                        new RegExp(input.getAttribute('pattern')) : 
+                        /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    if (!emailPattern.test(value)) {
+                        isValid = false;
+                    }
+                }
+
+                // Update UI
+                if (isValid) {
+                    input.classList.remove('invalid');
+                    errorElement.style.display = 'none';
+                } else {
+                    input.classList.add('invalid');
+                    errorElement.style.display = 'block';
+                }
+
+                return isValid;
+            }
+
+            function validateSection(sectionIndex) {
+                const section = sections[sectionIndex];
+                const requiredInputs = section.querySelectorAll('[required]');
+                let isValid = true;
+
+                requiredInputs.forEach(input => {
+                    if (!validateField(input)) {
+                        isValid = false;
+                    }
+                });
+
+                // Asset Return section validation
+                if (sectionIndex === 4) {
+                    const checkedAssets = section.querySelectorAll('input[name="assets"]:checked');
+                    const additionalAssets = section.querySelector('#additionalAssets').value.trim();
+                    
+                    if (checkedAssets.length === 0 && !additionalAssets) {
+                        alert('Please list your returned assets or indicate none');
+                        isValid = false;
+                    }
+                }
+
+                return isValid;
+            }
+
+            function updateProgress() {
+                const progress = ((currentSection + 1) / sections.length) * 100;
+                progressBar.style.width = `${progress}%`;
+            }
+
+            nextBtn.addEventListener('click', () => {
+                if (validateSection(currentSection)) {
+                    sections[currentSection].classList.remove('active');
+                    currentSection++;
+                    if (currentSection < sections.length) {
+                        sections[currentSection].classList.add('active');
+                        prevBtn.style.display = 'block';
+                        updateProgress();
+
+                        if (currentSection === sections.length - 1) {
+                            nextBtn.style.display = 'none';
+                            submitBtn.style.display = 'block';
+                        }
+                    }
+                }
+            });
+
+            prevBtn.addEventListener('click', () => {
+                sections[currentSection].classList.remove('active');
+                currentSection--;
+                sections[currentSection].classList.add('active');
+                
+                if (currentSection === 0) {
+                    prevBtn.style.display = 'none';
+                }
+                
+                nextBtn.style.display = 'block';
+                submitBtn.style.display = 'none';
+                updateProgress();
+            });
+
+            // Last work day validation - enforce correct date format
+            const lastWorkDayInput = document.getElementById('lastWorkDay');
+            
+            // Set minimum date for last working day (tomorrow)
+            const tomorrow = new Date();
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            const formattedTomorrow = tomorrow.toISOString().split('T')[0];
+            lastWorkDayInput.min = formattedTomorrow;
+
+            // Form submission handler
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Validate current section before submission
+                if (!validateSection(currentSection)) {
+                    return;
+                }
+
+                // Collect form data
+                const formData = new FormData(form);
+                const data = {};
+                
+                // Convert FormData to object
+                for (let [key, value] of formData.entries()) {
+                    data[key] = value;
+                }
+
+                // Add checked assets
+                data.assets = Array.from(
+                    document.querySelectorAll('input[name="assets"]:checked')
+                ).map(checkbox => checkbox.value);
+
+                // Store in localStorage
+                try {
+                    const existingData = JSON.parse(localStorage.getItem('offboardingData') || '[]');
+                    existingData.push({
+                        ...data,
+                        status: 'Pending',
+                        timestamp: new Date().toISOString()
+                    });
+                    localStorage.setItem('offboardingData', JSON.stringify(existingData));
+                    
+                    // Show success message and hide form
+                    form.style.display = 'none';
+                    successMessage.style.display = 'block';
+                    successMessage.textContent = 'Your offboarding request has been submitted successfully.';
+                } catch (error) {
+                    alert('There was an error submitting the form. Please try again.');
+                    console.error('Submission error:', error);
+                }
+            });
+
+            // Initialize form
+            updateProgress();
+        });
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+HR SID CODE:
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HR Offboarding Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: #f0f2f5;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            width: 90%;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            color: #ffffff;
+            background-color: #2980b9;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 35px;
+        }
+
+        .search-filter-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            gap: 20px;
+        }
+
+        .search-bar {
+            flex-grow: 1;
+            max-width: 500px;
+            display: flex;
+        }
+
+        .search-bar input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px 0 0 4px;
+            outline: none;
+        }
+
+        .search-bar button {
+            padding: 10px 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 0 4px 4px 0;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .search-bar button:hover {
+            background: #2980b9;
+        }
+
+        .controls-group {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .status-filter {
+            display: flex;
+            align-items: center;
+            white-space: nowrap;
+        }
+
+        .status-filter label {
+            margin-right: 10px;
+            font-weight: bold;
+        }
+
+        .status-filter select {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            outline: none;
+            min-width: 150px;
+        }
+
+        .clear-btn {
+            background-color: #e74c3c;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            white-space: nowrap;
+        }
+
+        .clear-btn:hover {
+            background-color: #c0392b;
+        }
+
+        .offboarding-request {
+            background: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 20px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .offboarding-request:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .request-details {
+            flex-grow: 1;
+            margin-right: 20px;
+        }
+
+        .request-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .request-actions button {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: opacity 0.3s;
+        }
+
+        .request-actions button:hover {
+            opacity: 0.9;
+        }
+
+        .approve-btn {
+            background-color: #2ecc71;
+            color: white;
+        }
+
+        .reject-btn {
+            background-color: #e74c3c;
+            color: white;
+        }
+
+        .view-btn {
+            background-color: #3498db;
+            color: white;
+        }
+
+        .status {
+            font-weight: bold;
+            margin-top: 10px;
+            padding: 4px 8px;
+            border-radius: 4px;
+            display: inline-block;
+        }
+
+        .status-pending { 
+            color: #f39c12;
+            background: rgba(243, 156, 18, 0.1);
+        }
+        .status-approved { 
+            color: #27ae60;
+            background: rgba(39, 174, 96, 0.1);
+        }
+        .status-rejected { 
+            color: #c0392b;
+            background: rgba(192, 57, 43, 0.1);
+        }
+
+        #noRequests {
+            text-align: center;
+            color: #7f8c8d;
+            margin-top: 50px;
+            font-size: 1.2em;
+            padding: 20px;
+            background: #f9f9f9;
+            border-radius: 8px;
+            border: 1px dashed #ddd;
+        }
+
+        .alert {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px;
+            background-color: #4CAF50;
+            color: white;
+            border-radius: 4px;
+            display: none;
+            max-width: 300px;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            animation: slideIn 0.5s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .alert.error {
+            background-color: #f44336;
+        }
+
+        .alert-close {
+            margin-left: 15px;
+            color: white;
+            font-weight: bold;
+            float: right;
+            font-size: 22px;
+            line-height: 20px;
+            cursor: pointer;
+        }
+
+        #detailModal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 90%;
+            max-width: 800px;
+            border-radius: 10px;
+            animation: slideDown 0.3s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateY(-100px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .close-btn {
+            color: #aaa;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .close-btn:hover {
+            color: #000;
+        }
+
+        .detail-section {
+            margin-bottom: 20px;
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 5px;
+            border: 1px solid #eee;
+        }
+
+        .detail-section h3 {
+            margin-bottom: 15px;
+            color: #2c3e50;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 8px;
+        }
+
+        .asset-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                width: 100%;
+                padding: 15px;
+            }
+
+            .search-filter-container {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .controls-group {
+                flex-direction: column;
+                width: 100%;
+                gap: 15px;
+            }
+
+            .search-bar {
+                max-width: 100%;
+            }
+
+            .status-filter {
+                width: 100%;
+            }
+
+            .status-filter select {
+                flex-grow: 1;
+            }
+
+            .clear-btn {
+                width: 100%;
+            }
+
+            .request-actions {
+                flex-direction: column;
+            }
+
+            .modal-content {
+                margin: 10% auto;
+                width: 95%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>HR OFFBOARDING MANAGEMENT</h1>
+        
+        <div id="confirmationAlert" class="alert">
+            <span class="alert-close">&times;</span>
+            <span id="alertMessage"></span>
+        </div>
+        
+        <div class="search-filter-container">
+            <div class="search-bar">
+                <input type="text" id="searchInput" placeholder="Search by name, department, or position...">
+                <button id="searchBtn">Search</button>
+            </div>
+            <div class="controls-group">
+                <div class="status-filter">
+                    <label for="statusFilter">Status:</label>
+                    <select id="statusFilter">
+                        <option value="All">All</option>
+                        <option value="Pending">Pending</option>
+                        <option value="Approved">Approved</option>
+                        <option value="Rejected">Rejected</option>
+                    </select>
+                </div>
+                <button id="clearRecordsBtn" class="clear-btn">Clear All Records</button>
+            </div>
+        </div>
+        
+        <div id="offboardingRequests"></div>
+        <div id="noRequests">No offboarding requests found at the moment.</div>
+    </div>
+
+    <div id="detailModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Request Details</h2>
+                <span class="close-btn">&times;</span>
+            </div>
+            <div id="modalDetails"></div>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const requestsContainer = document.getElementById('offboardingRequests');
+            const noRequestsMessage = document.getElementById('noRequests');
+            const detailModal = document.getElementById('detailModal');
+            const modalDetails = document.getElementById('modalDetails');
+            const closeBtn = document.querySelector('.close-btn');
+            const clearRecordsBtn = document.getElementById('clearRecordsBtn');
+            const searchInput = document.getElementById('searchInput');
+            const searchBtn = document.getElementById('searchBtn');
+            const statusFilter = document.getElementById('statusFilter');
+            const confirmationAlert = document.getElementById('confirmationAlert');
+            const alertMessage = document.getElementById('alertMessage');
+            const alertClose = document.querySelector('.alert-close');
+
+            function showAlert(message, isError = false) {
+                alertMessage.textContent = message;
+                confirmationAlert.style.display = 'block';
+                
+                if (isError) {
+                    confirmationAlert.classList.add('error');
+                } else {
+                    confirmationAlert.classList.remove('error');
+                }
+                
+                setTimeout(() => {
+                    confirmationAlert.style.animation = 'slideIn 0.5s ease-out reverse';
+                    setTimeout(() => {
+                        confirmationAlert.style.display = 'none';
+                        confirmationAlert.style.animation = '';
+                    }, 500);
+                }, 3000);
+            }
+            
+            alertClose.onclick = function() {
+                confirmationAlert.style.display = 'none';
+            }
+
+            function loadOffboardingRequests(searchTerm = '', statusValue = 'All') {
+                const offboardingData = JSON.parse(localStorage.getItem('offboardingData') || '[]');
+                
+                const filteredData = offboardingData.filter(request => {
+                    const matchesSearch = searchTerm === '' || 
+                        request.fullName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                        request.department.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                        request.position.toLowerCase().includes(searchTerm.toLowerCase());
+                    
+                    const matchesStatus = statusValue === 'All' || request.status === statusValue;
+                    
+                    return matchesSearch && matchesStatus;
+                });
+
+                requestsContainer.innerHTML = '';
+
+                if (filteredData.length === 0) {
+                    noRequestsMessage.style.display = 'block';
+                    if (searchTerm || statusValue !== 'All') {
+                        noRequestsMessage.textContent = 'No offboarding requests found matching your search criteria.';
+                    } else {
+                        noRequestsMessage.textContent = 'No offboarding requests found at the moment.';
+                    }
+                    return;
+                }
+
+                noRequestsMessage.style.display = 'none';
+
+                filteredData.forEach((request, index) => {
+                    const originalIndex = offboardingData.findIndex(r => 
+                        r.employeeId === request.employeeId && 
+                        r.timestamp === request.timestamp
+                    );
+                    
+                    const requestElement = document.createElement('div');
+                    requestElement.classList.add('offboarding-request');
+                    
+                    const actionButtons = request.status === 'Pending' ? 
+                        `<button class="view-btn" onclick="viewRequestDetails(${originalIndex})">View Details</button>
+                         <button class="approve-btn" onclick="updateRequestStatus(${originalIndex}, 'Approved')">Approve</button>
+                         <button class="reject-btn" onclick="updateRequestStatus(${originalIndex}, 'Rejected')">Reject</button>` : 
+                        `<button class="view-btn" onclick="viewRequestDetails(${originalIndex})">View Details</button>`;
+                    
+                    requestElement.innerHTML = `
+                        <div class="request-details">
+                            <h3>${request.fullName}</h3>
+                            <p><strong>Department:</strong> ${request.department}</p>
+                            <p><strong>Position:</strong> ${request.position}</p>
+                            <p><strong>Last Working Day:</strong> ${new Date(request.lastWorkDay).toLocaleDateString()}</p>
+                            <p><strong>Submission Date:</strong> ${new Date(request.timestamp).toLocaleString()}</p>
+                            <p class="status status-${request.status.toLowerCase()}">${request.status}</p>
+                        </div>
+                        <div class="request-actions">
+                            ${actionButtons}
+                        </div>
+                    `;
+
+                    requestsContainer.appendChild(requestElement);
+                });
+            }
+
+            window.viewRequestDetails = function(index) {
+                const offboardingData = JSON.parse(localStorage.getItem('offboardingData') || '[]');
+                const request = offboardingData[index];
+
+                function buildDetailedView() {
+                    return `
+                        <div class="detail-section">
+                            <h3>Personal Information</h3>
+                            <div class="asset-details">
+                                <div>
+                                    <p><strong>Full Name:</strong> ${request.fullName}</p>
+                                    <p><strong>Employee ID:</strong> ${request.employeeId}</p>
+                                    <p><strong>Company Email:</strong> ${request.email}</p>
+                                    <p><strong>Department:</strong> ${request.department}</p>
+                                    <p><strong>Position:</strong> ${request.position}</p>
+                                    <p><strong>Last Working Day:</strong> ${new Date(request.lastWorkDay).toLocaleDateString()}</p>
+                                </div>
+                                <div>
+                                    <p><strong>Personal Email:</strong> ${request.personalEmail}</p>
+                                    <p><strong>Phone Number:</strong> ${request.phoneNumber}</p>
+                                    <p><strong>Emergency Contact:</strong> ${request.alternateContactName || 'N/A'}</p>
+                                    <p><strong>Emergency Number:</strong> ${request.alternateContactNumber || 'N/A'}</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="detail-section">
+                            <h3>Project Handover</h3>
+                            <p><strong>Current Projects:</strong> ${request.currentProjects}</p>
+                            <p><strong>Project Status:</strong> ${request.projectStatus}</p>
+                            <p><strong>Handover Person:</strong> ${request.handoverPerson}</p>
+                        </div>
+
+                        <div class="detail-section">
+                            <h3>Exit Interview</h3>
+                            <p><strong>Reason for Leaving:</strong> ${request.resignationReason}</p>
+                            ${request.otherReasonDetails ? `<p><strong>Additional Details:</strong> ${request.otherReasonDetails}</p>` : ''}
+                            <p><strong>Feedback:</strong> ${request.feedback}</p>
+                            <p><strong>Would Recommend Company:</strong> ${request.wouldRecommend}</p>
+                        </div>
+
+                        <div class="detail-section">
+                            <h3>Asset Return</h3>
+                            <div class="asset-details">
+                                ${request.assets && request.assets.includes('laptop') ? `
+                                    <div>
+                                        <p><strong>Laptop:</strong> Returned</p>
+                                        <p>Serial Number: ${request.laptopSerial || 'Not Provided'}</p>
+                                    </div>
+                                ` : ''}
+                                ${request.assets && request.assets.includes('phone') ? `
+                                    <div>
+                                        <p><strong>Phone:</strong> Returned</p>
+                                        <p>Serial Number: ${request.phoneSerial || 'Not Provided'}</p>
+                                    </div>
+                                ` : ''}
+                                ${request.assets && request.assets.includes('monitor') ? `
+                                    <div>
+                                        <p><strong>Monitor:</strong> Returned</p>
+                                        <p>Serial Number: ${request.monitorSerial || 'Not Provided'}</p>
+                                    </div>
+                                ` : ''}
+                                ${request.assets && request.assets.includes('accessCard') ? `
+                                    <div>
+                                        <p><strong>Access Card:</strong> Returned</p>
+                                        <p>Card Number: ${request.accessCardNumber || 'Not Provided'}</p>
+                                    </div>
+                                ` : ''}
+                                ${request.additionalAssets ? `
+                                    <div>
+                                        <p><strong>Additional Assets:</strong> ${request.additionalAssets}</p>
+                                    </div>
+                                ` : ''}
+                            </div>
+                        </div>
+
+                        <div class="detail-section">
+                            <h3>Request Status</h3>
+                            <p><strong>Current Status:</strong> <span class="status status-${request.status.toLowerCase()}">${request.status}</span></p>
+                            <p><strong>Submitted On:</strong> ${new Date(request.timestamp).toLocaleString()}</p>
+                        </div>
+                    `;
+                }
+
+                modalDetails.innerHTML = buildDetailedView();
+                detailModal.style.display = 'block';
+            }
+
+            window.updateRequestStatus = function(index, status) {
+                if (confirm(`Are you sure you want to ${status.toLowerCase()} this request?`)) {
+                    const offboardingData = JSON.parse(localStorage.getItem('offboardingData') || '[]');
+                    offboardingData[index].status = status;
+                    localStorage.setItem('offboardingData', JSON.stringify(offboardingData));
+                    
+                    showAlert(`Request has been ${status.toLowerCase()} successfully.`);
+                    
+                    loadOffboardingRequests(
+                        searchInput.value,
+                        statusFilter.value
+                    );
+                }
+            }
+
+            // Event listeners for search and filter
+            searchBtn.addEventListener('click', function() {
+                loadOffboardingRequests(searchInput.value, statusFilter.value);
+            });
+            
+            searchInput.addEventListener('keyup', function(event) {
+                if (event.key === 'Enter') {
+                    loadOffboardingRequests(searchInput.value, statusFilter.value);
+                }
+            });
+            
+            statusFilter.addEventListener('change', function() {
+                loadOffboardingRequests(searchInput.value, this.value);
+            });
+
+            // Clear all records
+            clearRecordsBtn.addEventListener('click', function() {
+                if (confirm('Are you sure you want to clear all records? This action cannot be undone.')) {
+                    localStorage.removeItem('offboardingData');
+                    loadOffboardingRequests();
+                    showAlert('All records have been cleared successfully.');
+                }
+            });
+
+            // Close modal when clicking on close button
+            closeBtn.onclick = function() {
+                detailModal.style.display = 'none';
+            }
+
+            // Close modal when clicking outside of it
+            window.onclick = function(event) {
+                if (event.target == detailModal) {
+                    detailModal.style.display = 'none';
+                }
+            }
+
+            // Initial load
+            loadOffboardingRequests();
+        });
+    </script>
+</body>
+</html>
